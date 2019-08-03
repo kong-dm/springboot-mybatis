@@ -1,6 +1,8 @@
 package com.example.pojo;
 
-public class User {
+import java.io.Serializable;
+
+public class User  implements Serializable {
     private Integer userId;
 
     private String account;
@@ -14,6 +16,8 @@ public class User {
     private Integer userAge;
 
     private String userAddress;
+
+    private Boolean status;
 
     public Integer getUserId() {
         return userId;
@@ -71,6 +75,14 @@ public class User {
         this.userAddress = userAddress == null ? null : userAddress.trim();
     }
 
+    public Boolean getStatus() {
+        return status;
+    }
+
+    public void setStatus(Boolean status) {
+        this.status = status;
+    }
+
     @Override
     public String toString() {
         return "User{" +
@@ -81,6 +93,7 @@ public class User {
                 ", userSex='" + userSex + '\'' +
                 ", userAge=" + userAge +
                 ", userAddress='" + userAddress + '\'' +
+                ", status=" + status +
                 '}';
     }
 }

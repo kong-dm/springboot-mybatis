@@ -21,4 +21,32 @@ public class UserServiceImpl implements UserService {
     public User queryUserById(Integer uid) {
         return userMapper.selectUserById(uid);
     }
+
+    @Override
+    public Integer saveUser(User user) {
+      return userMapper.saveUser(user);
+    }
+
+    @Override
+    public User login(String account, String password) {
+        return userMapper.selectByAccount(account,password);
+    }
+
+
+    @Override
+    public Integer updateUser(User user) {
+        return userMapper.updateByPrimaryKeySelective(user);
+    }
+
+
+    @Override
+    public Integer deleteUser(Integer id,boolean status) {
+        return userMapper.updateByStatus(id,status);
+    }
+
+    @Override
+    public User queryUserAccount(String account) {
+
+        return  userMapper.queryByAccount(account);
+    }
 }

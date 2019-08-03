@@ -9,15 +9,140 @@
     <result column="user_sex" property="userSex" jdbcType="VARCHAR" />
     <result column="user_age" property="userAge" jdbcType="INTEGER" />
     <result column="user_address" property="userAddress" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="BIT" />
   </resultMap>
   <sql id="Base_Column_List" >
     user_id, account, password, user_name, user_sex, user_age, user_address
   </sql>
 
   <select id="selectUserById" resultType="com.example.pojo.User">
-    SELECT user_id as userId, account, password, user_name as userName, user_sex as userSex, user_age as userAge, user_address as userAddress
+    SELECT user_id as userId, account, password, user_name as userName, user_sex as userSex, user_age as userAge, user_address as userAddress,status
    FROM  tb_user
    WHERE  user_id=#{id}
 </select>
+
+  <insert id="saveUser" parameterType="com.example.pojo.User" >
+    insert into tb_user
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="userId != null" >
+        user_id,
+      </if>
+      <if test="account != null" >
+        account,
+      </if>
+      <if test="password != null" >
+        password,
+      </if>
+      <if test="userName != null" >
+        user_name,
+      </if>
+      <if test="userSex != null" >
+        user_sex,
+      </if>
+      <if test="userAge != null" >
+        user_age,
+      </if>
+      <if test="userAddress != null" >
+        user_address,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="userId != null" >
+        #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="account != null" >
+        #{account,jdbcType=VARCHAR},
+      </if>
+      <if test="password != null" >
+        #{password,jdbcType=VARCHAR},
+      </if>
+      <if test="userName != null" >
+        #{userName,jdbcType=VARCHAR},
+      </if>
+      <if test="userSex != null" >
+        #{userSex,jdbcType=VARCHAR},
+      </if>
+      <if test="userAge != null" >
+        #{userAge,jdbcType=INTEGER},
+      </if>
+      <if test="userAddress != null" >
+        #{userAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        #{status},
+      </if>
+    </trim>
+  </insert>
+
+
+  <select id="selectByAccount" resultType="com.example.pojo.User">
+   SELECT user_id as userId, account, password, user_name as userName, user_sex as userSex, user_age as userAge, user_address as userAddress,status
+   FROM  tb_user
+   WHERE  account=#{account} AND  password=#{password}
+
+  </select>
+
+  <update id="updateByPrimaryKeySelective" parameterType="com.example.pojo.User" >
+    update tb_user
+    <set >
+      <if test="account != null" >
+        account = #{account,jdbcType=VARCHAR},
+      </if>
+      <if test="password != null" >
+        password = #{password,jdbcType=VARCHAR},
+      </if>
+      <if test="userName != null" >
+        user_name = #{userName,jdbcType=VARCHAR},
+      </if>
+      <if test="userSex != null" >
+        user_sex = #{userSex,jdbcType=VARCHAR},
+      </if>
+      <if test="userAge != null" >
+        user_age = #{userAge,jdbcType=INTEGER},
+      </if>
+      <if test="userAddress != null" >
+        user_address = #{userAddress,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where user_id = #{userId,jdbcType=INTEGER}
+  </update>
+
+  <delete id="deleteByPrimaryKey" >
+    delete from tb_user
+    where user_id = #{userId,jdbcType=INTEGER}
+  </delete>
+
+<update id="updateByStatus">
+  UPDATE  tb_user
+  set status =#{status}
+  WHERE user_id = #{userId}
+</update>
+
+  <select id="queryRoleByAccount" resultType="com.example.pojo.Role">
+    SELECT r.role_id AS roleId,r.role_name as roleName,r.role_desc AS roleDesc
+    FROM  tb_user u
+    LEFT JOIN tb_user_role ur ON u.user_id=ur.user_id
+    LEFT JOIN tb_role r ON ur.role_id=r.role_id
+    WHERE u.account=#{account}
+  </select>
+
+  <select id="queryRoleByUserId" resultType="com.example.pojo.Role">
+    SELECT r.role_id AS roleId,r.role_name as roleName,r.role_desc AS roleDesc
+    FROM  tb_user u
+    LEFT JOIN tb_user_role ur ON u.user_id=ur.user_id
+    LEFT JOIN tb_role r ON ur.role_id=r.role_id
+    WHERE u.user_id=#{userId}
+  </select>
+
+  <select id="queryByAccount" resultType="com.example.pojo.User">
+    SELECT user_id as userId, account, password, user_name as userName, user_sex as userSex, user_age as userAge, user_address as userAddress,status
+    FROM  tb_user
+    WHERE  account=#{account}
+
+  </select>
+
 
 </mapper>
